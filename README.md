@@ -42,7 +42,9 @@ After selecting a seed track, PlexSage analyzes it and presents musical dimensio
 
 Select which dimensions you want more of—maybe you love the melancholy mood but want to explore different eras, or you want to stay in the same genre but find tracks with similar instrumentation. Your selections guide what the AI looks for.
 
-![Dimensions Screenshot](docs/images/screenshot-dimensions.png)
+![Dimensions Screenshot](docs/images/screenshot-seed-2.png)
+
+![Dimensions Selection Screenshot](docs/images/screenshot-seed-3.png)
 
 ### Step 2: Refine Your Filters
 
