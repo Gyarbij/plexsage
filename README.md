@@ -32,9 +32,17 @@ The AI first analyzes your request and suggests appropriate genre and decade fil
 
 ![Prompt Input Screenshot](docs/images/screenshot-prompt.png)
 
-**Option B: Start from a song you love** — Search for a track in your library and PlexSage analyzes its musical dimensions: mood, era, instrumentation, genre influences, lyrical themes, and more. Select which dimensions to explore and discover similar music you might have forgotten you owned.
+**Option B: Start from a song you love** — Search for a track in your library to use as a starting point.
 
 ![Seed Track Screenshot](docs/images/screenshot-seed.png)
+
+### Step 1b: Choose What to Explore (Seed Track Only)
+
+After selecting a seed track, PlexSage analyzes it and presents musical dimensions you can explore: mood, era, instrumentation, genre influences, lyrical themes, production style, and more. Each dimension is specific to your chosen track.
+
+Select which dimensions you want more of—maybe you love the melancholy mood but want to explore different eras, or you want to stay in the same genre but find tracks with similar instrumentation. Your selections guide what the AI looks for.
+
+![Dimensions Screenshot](docs/images/screenshot-dimensions.png)
 
 ### Step 2: Refine Your Filters
 
