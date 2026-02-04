@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlexSage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">PlexSage</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-view="create">Create</button>
+                <button class="nav-btn" data-view="settings">Settings</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Create View -->
+            <div id="create-view" class="view active">
+                <!-- Mode Selection -->
+                <div class="mode-tabs">
+                    <button class="mode-tab active" data-mode="prompt">
+                        <span class="mode-icon">💭</span>
+                        <span class="mode-label">Prompt</span>
+                    </button>
+                    <button class="mode-tab" data-mode="seed">
+                        <span class="mode-icon">🎵</span>
+                        <span class="mode-label">Seed Track</span>
+                    </button>
+                </div>
+
+                <!-- Step Progress -->
+                <div class="step-progress">
+                    <div class="step active" data-step="input">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Input</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" data-step="dimensions">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Dimensions</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" data-step="filters">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Filters</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" data-step="results">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Results</span>
+                    </div>
+                </div>
+
+                <!-- Step Content Container -->
+                <div class="step-content">
+                    <!-- Input Step (Prompt Mode) -->
+                    <div id="step-input-prompt" class="step-panel active">
+                        <h2>Describe your playlist</h2>
+                        <p class="step-description">Tell us what kind of music you're in the mood for.</p>
+                        <textarea
+                            id="prompt-input"
+                            class="prompt-textarea"
+                            placeholder="e.g., melancholy 90s alternative for a rainy day..."
+                            rows="4"
+                        ></textarea>
+                        <button id="analyze-prompt-btn" class="btn btn-primary">
+                            Analyze
+                        </button>
+                    </div>
+
+                    <!-- Input Step (Seed Mode) -->
+                    <div id="step-input-seed" class="step-panel">
+                        <h2>Find a song you like</h2>
+                        <p class="step-description">Search for a track to use as the starting point.</p>
+                        <div class="search-container">
+                            <input
+                                type="text"
+                                id="track-search-input"
+                                class="search-input"
+                                placeholder="Search by title or artist..."
+                            >
+                            <button id="search-tracks-btn" class="btn btn-secondary">Search</button>
+                        </div>
+                        <div id="search-results" class="search-results"></div>
+                    </div>
+
+                    <!-- Dimensions Step (Seed Mode Only) -->
+                    <div id="step-dimensions" class="step-panel">
+                        <h2>Choose dimensions to explore</h2>
+                        <p class="step-description">Select what aspects of this track you want more of.</p>
+                        <div id="selected-track" class="selected-track"></div>
+                        <div id="dimensions-list" class="dimensions-list"></div>
+                        <div class="additional-notes">
+                            <label for="additional-notes-input">Additional notes (optional)</label>
+                            <textarea
+                                id="additional-notes-input"
+                                class="notes-textarea"
+                                placeholder="Any additional preferences..."
+                                rows="2"
+                            ></textarea>
+                        </div>
+                        <button id="continue-to-filters-btn" class="btn btn-primary">
+                            Continue to Filters
+                        </button>
+                    </div>
+
+                    <!-- Filters Step -->
+                    <div id="step-filters" class="step-panel">
+                        <h2>Filter your library</h2>
+                        <p class="step-description">Select genres and decades to narrow down the tracks sent to the AI. Smaller pools mean lower costs and more focused results.</p>
+
+                        <div id="filter-preview" class="filter-preview">
+                            <span id="preview-tracks" class="preview-stat">-- matching tracks</span>
+                            <span id="preview-cost" class="preview-stat">Est. cost: --</span>
+                        </div>
+
+                        <div class="filter-section">
+                            <h3>Genres</h3>
+                            <div id="genre-chips" class="chip-container"></div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h3>Decades</h3>
+                            <div id="decade-chips" class="chip-container"></div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h3>Playlist Size</h3>
+                            <div class="track-count-selector">
+                                <button class="count-btn" data-count="15">15</button>
+                                <button class="count-btn active" data-count="25">25</button>
+                                <button class="count-btn" data-count="40">40</button>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h3>Max Tracks to AI</h3>
+                            <p class="filter-hint">Limit how many tracks are sent to the AI for selection. Higher = better variety but more cost.</p>
+                            <div class="track-limit-selector">
+                                <button class="limit-btn" data-limit="100">100</button>
+                                <button class="limit-btn" data-limit="250">250</button>
+                                <button class="limit-btn active" data-limit="500">500</button>
+                                <button class="limit-btn" data-limit="1000">1000</button>
+                                <button class="limit-btn" data-limit="0">No limit</button>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="exclude-live" checked>
+                                <span>Exclude live versions</span>
+                            </label>
+                        </div>
+
+                        <div class="filter-section">
+                            <h3>Minimum Rating</h3>
+                            <div class="rating-selector">
+                                <button class="rating-btn active" data-rating="0">Any</button>
+                                <button class="rating-btn" data-rating="2">★+</button>
+                                <button class="rating-btn" data-rating="4">★★+</button>
+                                <button class="rating-btn" data-rating="6">★★★+</button>
+                                <button class="rating-btn" data-rating="8">★★★★+</button>
+                            </div>
+                        </div>
+
+                        <button id="generate-btn" class="btn btn-primary">
+                            Generate Playlist
+                        </button>
+                    </div>
+
+                    <!-- Results Step -->
+                    <div id="step-results" class="step-panel">
+                        <div class="results-header">
+                            <h2>Your Playlist</h2>
+                            <div class="cost-display" id="cost-display"></div>
+                        </div>
+                        <div class="playlist-name-container">
+                            <input
+                                type="text"
+                                id="playlist-name-input"
+                                class="playlist-name-input"
+                                placeholder="Enter playlist name..."
+                            >
+                        </div>
+                        <div id="playlist-tracks" class="playlist-tracks"></div>
+                        <div class="results-actions">
+                            <button id="regenerate-btn" class="btn btn-secondary">
+                                Regenerate
+                            </button>
+                            <button id="save-playlist-btn" class="btn btn-primary">
+                                Save to Plex
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div id="loading-overlay" class="loading-overlay hidden">
+                    <div class="spinner"></div>
+                    <p id="loading-message">Analyzing...</p>
+                    <p id="loading-substep" class="loading-substep"></p>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-view" class="view">
+                <h2>Settings</h2>
+
+                <section class="settings-section">
+                    <h3>Plex Connection</h3>
+                    <div class="status-indicator" id="plex-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Not connected</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="plex-url">Plex Server URL</label>
+                        <input type="text" id="plex-url" placeholder="http://your-plex-server:32400">
+                    </div>
+                    <div class="form-group">
+                        <label for="plex-token">Plex Token</label>
+                        <input type="password" id="plex-token" placeholder="Your Plex token">
+                    </div>
+                    <div class="form-group">
+                        <label for="music-library">Music Library</label>
+                        <input type="text" id="music-library" value="Music" placeholder="Music library name">
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3>LLM Provider</h3>
+                    <div class="status-indicator" id="llm-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Not configured</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="llm-provider">Provider</label>
+                        <select id="llm-provider">
+                            <option value="anthropic">Anthropic (Claude)</option>
+                            <option value="openai">OpenAI (GPT)</option>
+                            <option value="gemini">Google (Gemini)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="llm-api-key">API Key</label>
+                        <input type="password" id="llm-api-key" placeholder="Your API key">
+                    </div>
+                </section>
+
+                <div class="settings-actions">
+                    <button id="save-settings-btn" class="btn btn-primary">
+                        Save Settings
+                    </button>
+                </div>
+
+                <section class="settings-section library-stats" id="library-stats-section" style="display: none;">
+                    <h3>Library Statistics</h3>
+                    <div id="library-stats"></div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Error Toast -->
+        <div id="error-toast" class="toast error hidden">
+            <span id="error-message"></span>
+            <button class="toast-close" onclick="hideError()">&times;</button>
+        </div>
+
+        <!-- Success Toast -->
+        <div id="success-toast" class="toast success hidden">
+            <span id="success-message"></span>
+            <button class="toast-close" onclick="hideSuccess()">&times;</button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <a href="https://github.com/ecwilsonaz/plexsage" target="_blank" rel="noopener" class="footer-brand">PlexSage</a>
+            <span class="footer-separator">·</span>
+            <span id="footer-model" class="footer-model">--</span>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+services:
+  plexsage:
+    build: .
+    container_name: plexsage
+    ports:
+      - "8765:8765"
+    environment:
+      - PLEX_URL=${PLEX_URL}
+      - PLEX_TOKEN=${PLEX_TOKEN}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    restart: unless-stopped

@@ -1,0 +1,30 @@
+# PlexSage Configuration
+# Copy this file to config.yaml and update with your settings
+# Environment variables take priority over values in this file
+
+plex:
+  # Plex server URL (override with PLEX_URL env var)
+  url: "http://your-plex-server:32400"
+  # Plex authentication token (override with PLEX_TOKEN env var)
+  # See: https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/
+  token: ""
+  # Name of your music library section in Plex
+  music_library: "Music"
+
+llm:
+  # LLM provider: "anthropic" or "openai"
+  provider: "anthropic"
+  # API key (override with ANTHROPIC_API_KEY or OPENAI_API_KEY env var)
+  api_key: ""
+  # Model for analysis (understanding prompts, extracting dimensions)
+  # Defaults: claude-sonnet-4-5-latest (Anthropic) or gpt-4.1 (OpenAI)
+  # model_analysis: "claude-sonnet-4-5-latest"
+  # Model for generation (selecting tracks from list)
+  # Defaults: claude-haiku-4-5-latest (Anthropic) or gpt-4.1-mini (OpenAI)
+  # model_generation: "claude-haiku-4-5-latest"
+  # Use the analysis model for generation too (higher quality, ~3-5x cost)
+  smart_generation: false
+
+defaults:
+  # Default number of tracks in generated playlists (15, 25, or 40)
+  track_count: 25
