@@ -15,7 +15,7 @@ PlexSage is a self-hosted web app that creates music playlists by combining LLM 
 ### Prompt-Based Flow
 Describe what you want in natural language, refine filters, and generate a playlist:
 
-<video src="https://github.com/user-attachments/assets/ae605d5a-676b-49ea-ae3a-3da79b01a97f" controls width="100%"></video>
+![Prompt-based flow demo](https://github.com/user-attachments/assets/ae605d5a-676b-49ea-ae3a-3da79b01a97f)
 
 ### Seed-Based Flow
 Start from a song you love and explore its musical dimensions:
