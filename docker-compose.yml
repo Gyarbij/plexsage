@@ -1,19 +1,43 @@
 services:
   plexsage:
-    image: ghcr.io/ecwilsonaz/plexsage:latest
+    image: ecwilsonaz/plexsage:latest
+    # Alternative registries:
+    # image: ghcr.io/ecwilsonaz/plexsage:latest
     # To build locally instead, comment out 'image' and uncomment 'build':
     # build: .
     container_name: plexsage
     ports:
       - "8765:8765"
     environment:
+      # Required: Plex server settings
       - PLEX_URL=${PLEX_URL}
       - PLEX_TOKEN=${PLEX_TOKEN}
       - PLEX_MUSIC_LIBRARY=${PLEX_MUSIC_LIBRARY:-Music}
+
+      # LLM Provider (anthropic, openai, gemini, ollama, or custom)
+      # Defaults to gemini. Can also be configured in the web UI.
+      #- LLM_PROVIDER=gemini
+
+      # Cloud provider API keys (set one)
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
-    # Optional: mount config file for advanced settings
+
+      # Optional: Override default models
+      #- LLM_MODEL_ANALYSIS=gemini-2.5-flash
+      #- LLM_MODEL_GENERATION=gemini-2.5-flash
+
+      # Local LLM: Ollama (experimental)
+      #- LLM_PROVIDER=ollama
+      #- OLLAMA_URL=http://host.docker.internal:11434
+      #- OLLAMA_CONTEXT_WINDOW=32768
+
+      # Local LLM: Custom OpenAI-compatible API (experimental)
+      #- LLM_PROVIDER=custom
+      #- CUSTOM_LLM_URL=https://openrouter.ai/api/v1
+      #- CUSTOM_LLM_API_KEY=sk-or-your-key
+      #- CUSTOM_CONTEXT_WINDOW=32768
+    # Optional: persist UI settings (uncomment to enable)
     # volumes:
-    #   - ./config.yaml:/app/config.yaml:ro
+    #   - ./config.user.yaml:/app/config.user.yaml
     restart: unless-stopped
