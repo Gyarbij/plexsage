@@ -1,5 +1,5 @@
 /**
- * PlexSage - Frontend Application
+ * MediaSage - Frontend Application
  */
 
 // =============================================================================
