@@ -452,9 +452,27 @@ function updateFilters() {
     });
 }
 
+function updateGeminiSuggestion() {
+    const suggestion = document.getElementById('gemini-suggestion');
+    if (!suggestion || !state.config) return;
+
+    // Show suggestion if not using Gemini
+    const provider = state.config.llm_provider;
+    if (provider !== 'gemini') {
+        // Gemini is 5x Anthropic (200K → 1M) and 8x OpenAI (128K → 1M)
+        const multiplier = provider === 'openai' ? '8x' : '5x';
+        suggestion.textContent = `Switch to Gemini in Settings for ${multiplier} higher track limits.`;
+        suggestion.classList.remove('hidden');
+    } else {
+        suggestion.classList.add('hidden');
+    }
+}
+
 function updateTrackLimitButtons() {
     const container = document.querySelector('.track-limit-selector');
     if (!container || !state.config) return;
+
+    updateGeminiSuggestion();
 
     const maxAllowed = state.config.max_tracks_to_ai || 3500;
 

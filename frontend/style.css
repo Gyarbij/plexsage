@@ -434,6 +434,13 @@ textarea {
     margin-bottom: var(--spacing-sm);
 }
 
+.gemini-suggestion {
+    margin-top: var(--spacing-sm);
+    margin-bottom: 0;
+    color: var(--accent);
+    font-style: italic;
+}
+
 /* Rating Selector */
 .rating-selector {
     display: flex;
