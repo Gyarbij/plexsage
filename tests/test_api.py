@@ -21,6 +21,8 @@ def create_mock_config(
     music_library="Music",
     llm_provider="anthropic",
     llm_api_key="key",
+    model_analysis="claude-sonnet-4-5",
+    model_generation="claude-haiku-4-5",
     track_count=25,
 ):
     """Create a properly structured mock config."""
@@ -30,6 +32,8 @@ def create_mock_config(
     mock.plex.music_library = music_library
     mock.llm.provider = llm_provider
     mock.llm.api_key = llm_api_key
+    mock.llm.model_analysis = model_analysis
+    mock.llm.model_generation = model_generation
     mock.defaults = DefaultsConfig(track_count=track_count)
     return mock
 

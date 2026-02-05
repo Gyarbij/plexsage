@@ -92,7 +92,8 @@ class TestLoadConfig:
     def test_loads_from_yaml_file(self, tmp_path, monkeypatch):
         """Should load configuration from YAML file."""
         # Clear any existing env vars
-        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"]:
+        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY",
+                    "GEMINI_API_KEY", "LLM_PROVIDER", "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
             monkeypatch.delenv(var, raising=False)
 
         config_file = tmp_path / "config.yaml"
@@ -121,6 +122,11 @@ class TestLoadConfig:
 
     def test_env_vars_override_yaml(self, tmp_path, monkeypatch):
         """Environment variables should override YAML values."""
+        # Clear any conflicting env vars first
+        for var in ["GEMINI_API_KEY", "OPENAI_API_KEY", "LLM_PROVIDER",
+                    "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
+            monkeypatch.delenv(var, raising=False)
+
         config_file = tmp_path / "config.yaml"
         config_data = {
             "plex": {"url": "http://yaml:32400", "token": "yaml-token"},
@@ -140,7 +146,8 @@ class TestLoadConfig:
 
     def test_uses_correct_api_key_for_provider(self, tmp_path, monkeypatch):
         """Should use ANTHROPIC_API_KEY or OPENAI_API_KEY based on provider."""
-        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"]:
+        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY",
+                    "GEMINI_API_KEY", "LLM_PROVIDER", "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
             monkeypatch.delenv(var, raising=False)
 
         # Test Anthropic provider
@@ -162,7 +169,8 @@ class TestLoadConfig:
 
     def test_default_models_for_anthropic(self, tmp_path, monkeypatch):
         """Should use default Anthropic models when not specified."""
-        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY"]:
+        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY",
+                    "GEMINI_API_KEY", "LLM_PROVIDER", "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
             monkeypatch.delenv(var, raising=False)
 
         config_file = tmp_path / "config.yaml"
@@ -176,7 +184,8 @@ class TestLoadConfig:
 
     def test_default_models_for_openai(self, tmp_path, monkeypatch):
         """Should use default OpenAI models when not specified."""
-        for var in ["PLEX_URL", "PLEX_TOKEN", "OPENAI_API_KEY"]:
+        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY",
+                    "GEMINI_API_KEY", "LLM_PROVIDER", "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
             monkeypatch.delenv(var, raising=False)
 
         config_file = tmp_path / "config.yaml"
@@ -190,7 +199,8 @@ class TestLoadConfig:
 
     def test_custom_models_override_defaults(self, tmp_path, monkeypatch):
         """Custom model settings should override defaults."""
-        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY"]:
+        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY",
+                    "GEMINI_API_KEY", "LLM_PROVIDER", "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
             monkeypatch.delenv(var, raising=False)
 
         config_file = tmp_path / "config.yaml"
@@ -211,7 +221,8 @@ class TestLoadConfig:
 
     def test_defaults_applied_when_no_config(self, tmp_path, monkeypatch):
         """Should use defaults when config file doesn't exist."""
-        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"]:
+        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY",
+                    "GEMINI_API_KEY", "LLM_PROVIDER", "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
             monkeypatch.delenv(var, raising=False)
 
         config_file = tmp_path / "nonexistent.yaml"
@@ -231,7 +242,8 @@ class TestLoadConfig:
         }
         config_file.write_text(yaml.dump(config_data))
 
-        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY"]:
+        for var in ["PLEX_URL", "PLEX_TOKEN", "ANTHROPIC_API_KEY", "OPENAI_API_KEY",
+                    "GEMINI_API_KEY", "LLM_PROVIDER", "LLM_MODEL_ANALYSIS", "LLM_MODEL_GENERATION"]:
             monkeypatch.delenv(var, raising=False)
 
         config = load_config(config_file)

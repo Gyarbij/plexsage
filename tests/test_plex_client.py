@@ -61,21 +61,23 @@ class TestPlexClientLibraryStats:
         """Should return library statistics."""
         from backend.plex_client import PlexClient
 
-        # Create mock tracks
-        mock_tracks = []
-        for i in range(10):
-            track = MagicMock()
-            track.ratingKey = str(i)
-            track.title = f"Track {i}"
-            track.grandparentTitle = f"Artist {i % 3}"
-            track.parentTitle = f"Album {i % 5}"
-            track.duration = 180000 + i * 10000
-            track.parentYear = 1990 + i
-            track.genres = [MagicMock(tag="Rock"), MagicMock(tag="Alternative")]
-            mock_tracks.append(track)
+        # Mock genre filter choices
+        mock_genre1 = MagicMock()
+        mock_genre1.title = "Rock"
+        mock_genre2 = MagicMock()
+        mock_genre2.title = "Alternative"
+
+        # Mock decade filter choices
+        mock_decade1 = MagicMock()
+        mock_decade1.title = "1990"
+        mock_decade2 = MagicMock()
+        mock_decade2.title = "2000"
 
         mock_library = MagicMock()
-        mock_library.search.return_value = mock_tracks
+        mock_library.totalViewSize.return_value = 10
+        mock_library.listFilterChoices.side_effect = lambda field, libtype: (
+            [mock_genre1, mock_genre2] if field == "genre" else [mock_decade1, mock_decade2]
+        )
 
         mock_server = MagicMock()
         mock_server.library.section.return_value = mock_library
@@ -85,8 +87,8 @@ class TestPlexClientLibraryStats:
             stats = client.get_library_stats()
 
             assert stats["total_tracks"] == 10
-            assert len(stats["genres"]) > 0
-            assert len(stats["decades"]) > 0
+            assert len(stats["genres"]) == 2
+            assert len(stats["decades"]) == 2
 
 
 class TestPlexClientMusicLibraries:

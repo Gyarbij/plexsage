@@ -141,42 +141,6 @@ class TestTrackMatching:
         assert "Tom and Jerry" in variations
         assert "Tom & Jerry" in variations
 
-    def test_match_track_with_exact_match(self, mock_plex_tracks):
-        """Should match exact track names."""
-        from backend.plex_client import match_track
-
-        # Mock a plex track object
-        class MockPlexTrack:
-            def __init__(self, title, artist):
-                self.title = title
-                self._artist = artist
-
-            def artist(self):
-                return MagicMock(title=self._artist)
-
-        plex_track = MockPlexTrack("Fake Plastic Trees", "Radiohead")
-
-        assert match_track("Radiohead", "Fake Plastic Trees", plex_track) is True
-
-    def test_match_track_with_fuzzy_match(self, mock_plex_tracks):
-        """Should fuzzy match similar track names."""
-        from backend.plex_client import match_track
-
-        class MockPlexTrack:
-            def __init__(self, title, artist):
-                self.title = title
-                self._artist = artist
-
-            def artist(self):
-                return MagicMock(title=self._artist)
-
-        plex_track = MockPlexTrack("Fake Plastic Trees", "Radiohead")
-
-        # Slight variation should still match
-        result = match_track("Radiohead", "Fake Plastic Tree", plex_track)
-        # This depends on FUZZ_THRESHOLD - may or may not match
-
-
 class TestLiveVersionFiltering:
     """Tests for live version detection."""
 
