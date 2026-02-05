@@ -239,6 +239,10 @@ services:
 | `PLEX_MUSIC_LIBRARY` | No | Library name if not "Music" |
 | `LLM_PROVIDER` | No | Force provider (auto-detected from API key) |
 
+### Web UI Configuration
+
+You can also configure PlexSage through the **Settings** page in the web UI. Settings entered there are saved to `config.user.yaml` and persist across restarts. Environment variables always take priority over UI-saved settings.
+
 ### Advanced: config.yaml
 
 Mount a config file for additional options:
