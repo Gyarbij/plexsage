@@ -29,7 +29,7 @@ Start from a song you love and explore its musical dimensions:
 ```bash
 docker run -d \
   --name plexsage \
-  -p 8765:8765 \
+  -p 5765:5765 \
   -e PLEX_URL=http://your-plex-server:32400 \
   -e PLEX_TOKEN=your-plex-token \
   -e GEMINI_API_KEY=your-gemini-key \
@@ -37,7 +37,7 @@ docker run -d \
   ghcr.io/ecwilsonaz/plexsage:latest
 ```
 
-Open **http://localhost:8765** and start creating playlists.
+Open **http://localhost:5765** and start creating playlists.
 
 **Requirements:** Docker, a Plex server with music, a [Plex token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/), and an API key from Google, Anthropic, or OpenAI.
 
@@ -173,7 +173,7 @@ docker compose up -d
 1. **Container Manager** → **Registry** → Search `ghcr.io/ecwilsonaz/plexsage`
 2. Download `latest` tag
 3. **Container** → **Create**
-4. Port: 8765 → 8765
+4. Port: 5765 → 5765
 5. Add environment variables: `PLEX_URL`, `PLEX_TOKEN`, `GEMINI_API_KEY`
 
 **Docker Compose:**
@@ -192,7 +192,7 @@ Then in **Container Manager** → **Project** → **Create**, point to `/volume1
 
 1. **Docker** → **Add Container**
 2. Repository: `ghcr.io/ecwilsonaz/plexsage:latest`
-3. Port: 8765 → 8765
+3. Port: 5765 → 5765
 4. Add variables: `PLEX_URL`, `PLEX_TOKEN`, `GEMINI_API_KEY`
 
 </details>
@@ -202,7 +202,7 @@ Then in **Container Manager** → **Project** → **Create**, point to `/volume1
 
 1. **Apps** → **Discover Apps** → **Custom App**
 2. Image: `ghcr.io/ecwilsonaz/plexsage`, Tag: `latest`
-3. Port: 8765
+3. Port: 5765
 4. Add environment variables
 
 </details>
@@ -217,7 +217,7 @@ services:
   plexsage:
     image: ghcr.io/ecwilsonaz/plexsage:latest
     ports:
-      - "8765:8765"
+      - "5765:5765"
     environment:
       - PLEX_URL=http://your-server:32400
       - PLEX_TOKEN=your-token
@@ -374,7 +374,7 @@ export PLEX_URL=http://your-plex-server:32400
 export PLEX_TOKEN=your-plex-token
 export GEMINI_API_KEY=your-key
 
-uvicorn backend.main:app --reload --port 8765
+uvicorn backend.main:app --reload --port 5765
 ```
 
 ### Testing

@@ -11,7 +11,7 @@ COPY backend/ ./backend/
 COPY frontend/ ./frontend/
 
 # Expose port
-EXPOSE 8765
+EXPOSE 5765
 
 # Run the application
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8765"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "5765"]

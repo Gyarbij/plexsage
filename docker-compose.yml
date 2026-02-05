@@ -7,7 +7,7 @@ services:
     # build: .
     container_name: plexsage
     ports:
-      - "8765:8765"
+      - "5765:5765"
     environment:
       # Required: Plex server settings
       - PLEX_URL=${PLEX_URL}
