@@ -61,10 +61,24 @@ class LLMResponse:
 
     def estimated_cost(self) -> float:
         """Estimate cost in USD based on token usage."""
-        costs = MODEL_COSTS.get(self.model, {"input": 1.0, "output": 2.0})
-        input_cost = (self.input_tokens / 1_000_000) * costs["input"]
-        output_cost = (self.output_tokens / 1_000_000) * costs["output"]
-        return input_cost + output_cost
+        return estimate_cost_for_model(self.model, self.input_tokens, self.output_tokens)
+
+
+def estimate_cost_for_model(model: str, input_tokens: int, output_tokens: int) -> float:
+    """Estimate cost in USD for a given model and token counts.
+
+    Args:
+        model: Model name (e.g., 'claude-haiku-4-5', 'gpt-4.1-mini')
+        input_tokens: Estimated input token count
+        output_tokens: Estimated output token count
+
+    Returns:
+        Estimated cost in USD
+    """
+    costs = MODEL_COSTS.get(model, {"input": 1.0, "output": 2.0})
+    input_cost = (input_tokens / 1_000_000) * costs["input"]
+    output_cost = (output_tokens / 1_000_000) * costs["output"]
+    return input_cost + output_cost
 
 
 class LLMClient:

@@ -30,7 +30,12 @@ from backend.models import (
     UpdateConfigRequest,
 )
 from backend.plex_client import get_plex_client, init_plex_client
-from backend.llm_client import get_llm_client, init_llm_client, get_max_tracks_for_model
+from backend.llm_client import (
+    get_llm_client,
+    init_llm_client,
+    get_max_tracks_for_model,
+    estimate_cost_for_model,
+)
 from backend.analyzer import analyze_prompt as do_analyze_prompt, analyze_track as do_analyze_track
 from backend.generator import generate_playlist as do_generate_playlist
 
@@ -273,19 +278,11 @@ async def preview_filters(request: FilterPreviewRequest) -> FilterPreviewRespons
     estimated_input_tokens = 500 + (tracks_to_send * 50)  # Base prompt + track list
     estimated_output_tokens = request.track_count * 30  # ~30 tokens per track suggestion
 
-    # Calculate cost based on provider
-    # Claude Haiku: $0.25/1M input, $1.25/1M output
-    # GPT-4.1-mini: $0.40/1M input, $1.60/1M output
-    if config.llm.provider == "anthropic":
-        input_cost_per_m = 0.25
-        output_cost_per_m = 1.25
-    else:
-        input_cost_per_m = 0.40
-        output_cost_per_m = 1.60
-
-    estimated_cost = (
-        (estimated_input_tokens / 1_000_000) * input_cost_per_m +
-        (estimated_output_tokens / 1_000_000) * output_cost_per_m
+    # Calculate cost using the actual configured generation model
+    estimated_cost = estimate_cost_for_model(
+        config.llm.model_generation,
+        estimated_input_tokens,
+        estimated_output_tokens,
     )
 
     return FilterPreviewResponse(
