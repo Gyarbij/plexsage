@@ -277,7 +277,7 @@ async def preview_filters(request: FilterPreviewRequest) -> FilterPreviewRespons
 
     genres = request.genres if request.genres else None
     decades = request.decades if request.decades else None
-    exclude_live = True  # Always exclude live for preview/generate
+    exclude_live = request.exclude_live
     min_rating = request.min_rating
 
     # Use count-only method (no full track conversion) for fast preview

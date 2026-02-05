@@ -373,9 +373,11 @@ async function fetchLibraryStats() {
 // =============================================================================
 
 function updateView() {
-    // Update nav buttons
+    // Update nav buttons (class and ARIA state)
     document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.view === state.view);
+        const isActive = btn.dataset.view === state.view;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
 
     // Update views
@@ -429,9 +431,17 @@ function updateStep() {
     document.querySelectorAll('.step').forEach((stepEl, index) => {
         const stepName = stepEl.dataset.step;
         const stepIndex = steps.indexOf(stepName);
+        const isActive = stepName === state.step;
 
-        stepEl.classList.toggle('active', stepName === state.step);
+        stepEl.classList.toggle('active', isActive);
         stepEl.classList.toggle('completed', stepIndex < currentIndex);
+
+        // Update ARIA state for screen readers
+        if (isActive) {
+            stepEl.setAttribute('aria-current', 'step');
+        } else {
+            stepEl.removeAttribute('aria-current');
+        }
     });
 
     // Update step panels
@@ -477,7 +487,9 @@ function updateFilters() {
 
     // Update track count buttons
     document.querySelectorAll('.count-btn').forEach(btn => {
-        btn.classList.toggle('active', parseInt(btn.dataset.count) === state.trackCount);
+        const isActive = parseInt(btn.dataset.count) === state.trackCount;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
     // Update max tracks to AI buttons
@@ -487,6 +499,7 @@ function updateFilters() {
         const isActive = limit === state.maxTracksToAI ||
             (limit === 0 && state.maxTracksToAI >= maxAllowed);
         btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
     // Update checkboxes
@@ -494,7 +507,9 @@ function updateFilters() {
 
     // Update rating buttons
     document.querySelectorAll('.rating-btn').forEach(btn => {
-        btn.classList.toggle('active', parseInt(btn.dataset.rating) === state.minRating);
+        const isActive = parseInt(btn.dataset.rating) === state.minRating;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 }
 
@@ -577,6 +592,7 @@ async function updateFilterPreview() {
                 track_count: state.trackCount,
                 max_tracks_to_ai: state.maxTracksToAI,
                 min_rating: state.minRating,
+                exclude_live: state.excludeLive,
             }),
         });
 
@@ -616,7 +632,13 @@ function updateFilterPreviewDisplay(matchingTracks, tracksToSend, estimatedCost)
         trackText = 'Unknown';
     }
     previewTracks.textContent = trackText;
-    previewCost.textContent = `Est. cost: $${estimatedCost.toFixed(4)}`;
+
+    // Show unknown cost when track count is unknown
+    if (matchingTracks < 0) {
+        previewCost.textContent = 'Est. cost: --';
+    } else {
+        previewCost.textContent = `Est. cost: $${estimatedCost.toFixed(4)}`;
+    }
 
     // Update "All/Max" button label based on whether filtered tracks fit in context
     const maxBtn = document.querySelector('.limit-btn[data-limit="0"]');
